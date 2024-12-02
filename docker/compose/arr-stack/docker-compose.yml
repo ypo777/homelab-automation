@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ${SERVICE_NAME}:
+    image: linuxserver/${SERVICE_NAME}:latest
+    container_name: ${SERVICE_NAME}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${CONFIG_ROOT}/${SERVICE_NAME}:/config
+      - ${MEDIA_ROOT}:/media
+      - ${DOWNLOADS_ROOT}:/downloads
+    ports:
+      - "${HOST_PORT}:${CONTAINER_PORT}"
+    restart: unless-stopped
+    networks:
+      - arr-network
+
+networks:
+  arr-network:
+    name: arr-network
+    driver: bridge

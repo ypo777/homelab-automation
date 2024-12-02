@@ -1,0 +1,43 @@
+# Ansible
+ansible/roles/geerlingguy.*
+ansible/roles/vendor.*
+*.retry
+ansible/*.log
+ansible/inventory/inventory.ini
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Docker
+docker/configs/**/*
+!docker/configs/**/.gitkeep
+docker/**/data/
+.env
+*.env
+docker-compose.override.yml
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Keep these
+!ansible/roles/arr_stack/
+!docker/compose/**/docker-compose.yml
+!docker/configs/.gitkeep

@@ -1,0 +1,59 @@
+arr_services:
+  - name: sonarr
+    host_port: 8989
+    container_port: 8989
+    media_path: /media/tv
+  - name: radarr
+    host_port: 7878
+    container_port: 7878
+    media_path: /media/movies
+  - name: lidarr
+    host_port: 8686
+    container_port: 8686
+    media_path: /media/music
+  - name: prowlarr
+    host_port: 9696
+    container_port: 9696
+    media_path: ''
+
+arr_common:
+  puid: 1000
+  pgid: 1000
+  tz: 'Asia/Bangkok'
+  umask: '002'
+  config_root: '/opt/arr/config'
+  media_root: '/opt/arr/media'
+  downloads_root: '/opt/arr/downloads'
+
+# Rootless Docker setup
+docker_prerequisite_packages:
+  - uidmap
+  - dbus-user-session
+  - fuse-overlayfs
+  - slirp4netns
+
+docker_edition: 'ce'
+docker_packages:
+  - 'docker-{{ docker_edition }}-rootless-extras'
+  - 'docker-{{ docker_edition }}-cli'
+  - 'containerd.io'
+  - 'docker-buildx-plugin'
+
+# Disable system service since we're using rootless
+docker_service_manage: false
+docker_service_enabled: false
+
+# Add your user to use Docker
+docker_users: ['{{ ansible_user }}']
+
+# Architecture for Pi5
+docker_apt_arch: 'arm64'
+
+# Docker Compose configuration
+docker_install_compose_plugin: true
+docker_compose_package: docker-compose-plugin
+docker_compose_package_state: present
+
+# If you want the standalone docker-compose binary as well
+docker_install_compose: true
+docker_compose_version: 'v2.24.0' # Latest stable version as of now

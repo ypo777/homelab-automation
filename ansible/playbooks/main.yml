@@ -1,0 +1,33 @@
+---
+- name: Setup Docker
+  hosts: dev
+  become: true
+  roles:
+    - role: geerlingguy.docker
+      tags: ['never', 'docker']
+  post_tasks:
+    - name: Setup rootless Docker
+      ansible.builtin.shell: |
+        dockerd-rootless-setuptool.sh install --force
+      register: rootless_setup
+      changed_when: rootless_setup.rc == 0
+      become: false
+      tags: ['never', 'docker']
+
+    - name: Start and enable Docker user service
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+        scope: user
+      environment:
+        XDG_RUNTIME_DIR: '/run/user/{{ ansible_user_uid }}'
+      become: false
+      tags: ['never', 'docker']
+
+- name: Deploy arr-stack
+  hosts: dev
+  become: true
+  roles:
+    - role: arr_stack
+      tags: ['arr']
